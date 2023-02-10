@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block title %}Add Author{% endblock %}
+
+{% block content %}
+<h3>Copy</h3>
+<form method="post" class="form-control">
+  {% csrf_token %}
+  {% load crispy_forms_tags %}
+  {{ form|crispy }}
+
+  <input type="submit" value="Add Book Copy!" class="btn btn-block btn-primary"/>
+</form>
+
+{% endblock %}

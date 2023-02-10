@@ -10,10 +10,10 @@
           <a class="nav-link" href="{% url 'catalog:index' %}">Library<span class="sr-only">(current)</span></a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="">All Books</a>
+          <a class="nav-link" href="{% url 'catalog:book-list' %}">All Books</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link" href="">All Authors</a>
+          <a class="nav-link" href="{% url 'catalog:author-list' %}">All Authors</a>
         </li>
 
 
@@ -22,10 +22,11 @@
             Add..
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">Author</a>
-            <a class="dropdown-item" href="#">Book</a>
+            <a class="dropdown-item" href="{% url 'catalog:author-create' %}">Author</a>
+            <a class="dropdown-item" href="{% url 'catalog:book-create' %}">Book</a>
             <div class="dropdown-divider"></div>
-            <a class="dropdown-item" href="#">---</a>
+            <a class="dropdown-item" href="{% url 'catalog:genre-create' %}">Genre</a>
+            <a class="dropdown-item" href="{% url 'catalog:language-create' %}">Language</a>
           </div>
         </li>
 

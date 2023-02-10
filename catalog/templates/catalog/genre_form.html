@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Add Genre{% endblock %}
+
+{% block content %}
+<h3>Genre</h3>
+
+<form method="post" class="form-control">
+  {% csrf_token %}
+  {% load crispy_forms_tags %}
+  {{ form|crispy }}
+
+  <input type="submit" value="{% if 'update' in request.path %}Update{% else %}Add{% endif %} Genre!" class="btn btn-block btn-primary"/>
+</form>
+
+{% endblock %}

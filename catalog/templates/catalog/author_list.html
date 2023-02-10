@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}Author List{% endblock %}
+
+{% block content %}
+
+
+<h1>Author List</h1>
+
+{% if author_list %}
+<table class="table table-striped">
+  <tbody>
+  {% for author in author_list %}
+  <tr>
+    <td><a href="{{ author.get_absolute_url }}">{{ author }}</a></td>
+    <td>{{author.date_of_birth}}</td>
+    <td>{% if author.date_of_death %}{{author.date_of_death}}{% endif %}</td>
+    <td><a href="{% url 'catalog:author-update' author.id %}" class="btn btn-sm btn-secondary">Edit Author</a></td>
+    <td><a href="{% url 'catalog:author-delete' author.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')">Delete Author</a></td>
+  </tr>
+  {% endfor %}
+  </tbody>
+</table>
+
+{% else %}
+  <p>There are no authors available.</p>
+{% endif %}
+        
+{% endblock %}

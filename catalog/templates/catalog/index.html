@@ -33,7 +33,7 @@ OneLibrary | Django Training Library Project
             <li><strong>Authors:</strong> {{ num_authors }}</li>
           </ul>
           <br><br><br><br>
-          <a href="#" class="btn btn-secondary btn-block">Go To Books List</a>
+          <a href="{% url 'catalog:book-list' %}" class="btn btn-secondary btn-block">Go To Books List</a>
           <br>
           <p>You visited OneLibrary {{ num_visit }} times.</p>
         </div>

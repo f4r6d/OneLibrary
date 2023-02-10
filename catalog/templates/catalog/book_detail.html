@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block title %}{{ book }}{% endblock %}
+
+{% block content %}
+
+<h1>Title: {{ book.title }}</h1>
+
+<p><strong>Author:</strong> <a href="{% url 'catalog:author-detail' book.author.id %}">{{ book.author }}</a></p> <!-- author detail link not yet defined -->
+<p><strong>Summary:</strong> {{ book.summary }}</p>
+<p><strong>ISBN:</strong> {{ book.isbn }}</p>
+<p><strong>Language:</strong> {{ book.language }}</p>
+<p><strong>Genre:</strong> {{ book.genre.all|join:", " }}</p>
+<a href="{% url 'catalog:book-update' book.id %}" class="btn btn-secondary">Edit Book</a>
+<a href="{% url 'catalog:book_instance-create' book.id %}" class="btn btn-primary">Add Copy</a>
+<a href="{% url 'catalog:book-delete' book.id %}?next={{request.path}}" class="btn btn-danger" onclick="return confirm('Delete?')">Delete Book</a></td>
+
+
+<div style="margin-left:20px;margin-top:20px">
+  <h4>Copies</h4>
+
+  {% for copy in book.bookinstance_set.all %}
+    <hr>
+    <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
+      {{ copy.get_status_display }}
+    </p>
+    {% if copy.status != 'a' %}
+      <p><strong>Due to be returned:</strong> {{ copy.due_back }}</p>
+    {% endif %}
+    <p><strong>Imprint:</strong> {{ copy.imprint }}</p>
+    <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+    <a href="{% url 'catalog:book_instance-delete' copy.id %}?next={{request.path}}" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')">Delete Copy</a></td>
+
+  {% endfor %}
+</div>
+
+{% endblock %}

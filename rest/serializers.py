@@ -1,0 +1,29 @@
+from rest_framework import serializers
+from django.contrib.auth.models import User, Group
+from catalog.models import Book, Author
+
+
+class UserSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = User
+        fields = ['url', 'username', 'email', 'groups']
+
+
+class GroupSerializer(serializers.HyperlinkedModelSerializer):
+    class Meta:
+        model = Group
+        fields = ['url', 'name']
+
+
+class BookSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Book
+        fields = ['url', 'title', 'isbn', 'summary', 'author', 'genre', 'language']
+
+
+class AuthorSerializer(serializers.HyperlinkedModelSerializer):
+    books = BookSerializer(source='book_set', many=True)
+
+    class Meta:
+        model = Author
+        fields = ['url', 'first_name', 'last_name', 'books',]

@@ -20,11 +20,24 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 
+from rest_framework import routers
+from rest import views
+
+
+router = routers.DefaultRouter()
+router.register(r'users', views.UserViewSet)
+router.register(r'groups', views.GroupViewSet)
+router.register(r'books', views.BookViewSet)
+router.register(r'authors', views.AuthorViewSet)
+
+
 urlpatterns = [
     # path('', TemplateView.as_view(template_name='index.html'), name='index'),
     path('', include('catalog.urls')),
+    path('rest/', include(router.urls)),
     path('members/', include('members.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('chat/', include('chat.urls')),
+    path('api-auth/', include('rest_framework.urls')),
     path('admin/', admin.site.urls),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

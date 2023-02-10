@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'crispy_forms',
     'catalog.apps.CatalogConfig',
     'members.apps.MembersConfig',
+    'chat.apps.ChatConfig',
 ]
 
 MIDDLEWARE = [

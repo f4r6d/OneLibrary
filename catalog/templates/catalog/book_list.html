@@ -14,7 +14,9 @@
   <tr>
     <td><a href="{{ book.get_absolute_url }}">{{ book.title }}</a></td>
     <td>{{book.author}}</td>
+    {% if request.user.is_staff %}
     <td><a href="{% url 'catalog:book-update' book.id %}" class="btn btn-sm btn-secondary">Edit Book</a></td>
+    {% endif %}
   </tr>
   {% endfor %}
   </tbody>

@@ -15,8 +15,10 @@
     <td><a href="{{ author.get_absolute_url }}">{{ author }}</a></td>
     <td>{{author.date_of_birth}}</td>
     <td>{% if author.date_of_death %}{{author.date_of_death}}{% endif %}</td>
+    {% if request.user.is_staff %}
     <td><a href="{% url 'catalog:author-update' author.id %}" class="btn btn-sm btn-secondary">Edit Author</a></td>
     <td><a href="{% url 'catalog:author-delete' author.id %}" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')">Delete Author</a></td>
+    {% endif %}
   </tr>
   {% endfor %}
   </tbody>

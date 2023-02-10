@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+
+{% block title %}My Borrowed Book List{% endblock %}
+
+{% block content %}
+
+<h1>All Borrowed books:</h1>
+
+{% if bookinstance_list %}
+<table class="table table-striped">
+  <tbody>
+
+  {% for bookinst in bookinstance_list %} 
+
+  <tr class="{% if bookinst.is_overdue %}table-danger{% endif %}">
+    <td><a href="{% url 'catalog:book-detail' bookinst.book.pk %}">{{bookinst.book.title}}</a></td>
+    <td>{{ bookinst.borrower }}</td>
+    <td>{{ bookinst.due_back }}</td>
+    {% if perms.catalog.can_mark_returned %}
+    <td><a href="{% url 'catalog:book_instance-renew' bookinst.id %}" class="btn btn-sm btn-secondary">Renew</a></td>
+    <td><a href="{% url 'catalog:book_instance-take-back' bookinst.id %}" class="btn btn-sm btn-info" onclick="return confirm('Sure?')">Take Back</a></td>
+    {% endif %}
+  {% endfor %}
+  </tbody>
+</table>
+
+{% else %}
+  <p>There are no books borrowed.</p>
+{% endif %} 
+
+
+
+{% endblock %}

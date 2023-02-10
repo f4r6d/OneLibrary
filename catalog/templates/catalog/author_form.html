@@ -1,9 +1,9 @@
 {% extends "base.html" %}
 
-{% block title %}Add Author{% endblock %}
+{% block title %}{% if 'update' in request.path %}Update{% else %}Add{% endif %} Author{% endblock %}
 
 {% block content %}
-<h3>Author</h3>
+<h3>{% if 'update' in request.path %}Update{% else %}Add{% endif %} Author</h3>
 <form method="post" class="form-control">
   {% csrf_token %}
   {% load crispy_forms_tags %}

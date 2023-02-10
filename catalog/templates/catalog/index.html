@@ -8,7 +8,7 @@ OneLibrary | Django Training Library Project
 
 {% block content %}
 
-<h3>Welcome To The OneLibrary</h3>
+<h2>Welcome To The OneLibrary</h2>
 <br>
 
 <div class="row">
@@ -23,8 +23,10 @@ OneLibrary | Django Training Library Project
     <div class="col-sm-6">
       <div class="card">
         <div class="card-body">
-          <h5 class="card-title">About OneLibrary:</h5>
+          <h3 class="card-title">About OneLibrary:</h3>
           <p class="card-text">This is a fictional library designed to practice Django so you can borrow the books you like.</p>
+          <br>
+          <h5 class="card-text">Log In Using "admin" as username and password to see how it look likes to be a ADMIN :)</h5>
           <br>
           <ul>
             <li><strong>Books:</strong> {{ num_books }}</li>
@@ -32,7 +34,7 @@ OneLibrary | Django Training Library Project
             <li><strong>Copies available:</strong> {{ num_instances_available }}</li>
             <li><strong>Authors:</strong> {{ num_authors }}</li>
           </ul>
-          <br><br><br><br>
+          <br>
           <a href="{% url 'catalog:book-list' %}" class="btn btn-secondary btn-block">Go To Books List</a>
           <br>
           <p>You visited OneLibrary {{ num_visit }} times.</p>

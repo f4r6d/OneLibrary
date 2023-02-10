@@ -1,5 +1,7 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  {% if request.user.is_staff %}
     <a class="navbar-brand" href="{% url 'admin:index' %}">Admin</a>
+    {% endif %}
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
@@ -17,6 +19,7 @@
         </li>
 
 
+        {% if request.user.is_staff %}
         <li class="nav-item dropdown">
           <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             Add..
@@ -29,6 +32,7 @@
             <a class="dropdown-item" href="{% url 'catalog:language-create' %}">Language</a>
           </div>
         </li>
+        {% endif %}
 
 
 
@@ -42,9 +46,9 @@
             {{ user|title }}
           </a>
           <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-            <a class="dropdown-item" href="#">My Borrowed</a>
+            <a class="dropdown-item" href="{% url 'catalog:my-borrowed' %}">My Borrowed</a>
             {% if request.user.is_staff %}
-            <a class="dropdown-item" href="#">All Borrowed</a>
+            <a class="dropdown-item" href="{% url 'catalog:borrowed' %}">All Borrowed</a>
             {% endif %}
             <div class="dropdown-divider"></div>
             <a class="dropdown-item" href="{% url 'logout' %}?next={{ request.path }}">Logout</a>

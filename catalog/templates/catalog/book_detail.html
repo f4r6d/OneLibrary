@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 
-{% block title %}{{ book }}{% endblock %}
+{% block title %}Book | {{ book }}{% endblock %}
 
 {% block content %}
 
@@ -11,10 +11,11 @@
 <p><strong>ISBN:</strong> {{ book.isbn }}</p>
 <p><strong>Language:</strong> {{ book.language }}</p>
 <p><strong>Genre:</strong> {{ book.genre.all|join:", " }}</p>
+{% if request.user.is_staff %}
 <a href="{% url 'catalog:book-update' book.id %}" class="btn btn-secondary">Edit Book</a>
 <a href="{% url 'catalog:book_instance-create' book.id %}" class="btn btn-primary">Add Copy</a>
 <a href="{% url 'catalog:book-delete' book.id %}?next={{request.path}}" class="btn btn-danger" onclick="return confirm('Delete?')">Delete Book</a></td>
-
+{% endif %}
 
 <div style="margin-left:20px;margin-top:20px">
   <h4>Copies</h4>
@@ -24,12 +25,16 @@
     <p class="{% if copy.status == 'a' %}text-success{% elif copy.status == 'm' %}text-danger{% else %}text-warning{% endif %}">
       {{ copy.get_status_display }}
     </p>
-    {% if copy.status != 'a' %}
+    {% if copy.status == 'o' %}
       <p><strong>Due to be returned:</strong> {{ copy.due_back }}</p>
     {% endif %}
     <p><strong>Imprint:</strong> {{ copy.imprint }}</p>
     <p class="text-muted"><strong>Id:</strong> {{ copy.id }}</p>
+    {% if request.user.is_staff %}
     <a href="{% url 'catalog:book_instance-delete' copy.id %}?next={{request.path}}" class="btn btn-sm btn-danger" onclick="return confirm('Delete?')">Delete Copy</a></td>
+    <a href="{% url 'catalog:book_instance-update' copy.id %}?next={{request.path}}" class="btn btn-sm btn-primary">Edit Copy</a></td>
+    {% endif %}
+    <a href="{% url 'catalog:book_instance-borrow' copy.id %}?next={{request.path}}" class="btn btn-sm btn-success" onclick="return confirm('Are you sure?')">Borrow</a></td>
 
   {% endfor %}
 </div>

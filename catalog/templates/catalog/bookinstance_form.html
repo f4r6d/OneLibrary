@@ -1,15 +1,15 @@
 {% extends "base.html" %}
 
-{% block title %}Add Author{% endblock %}
+{% block title %}{% if 'renew' in request.path %}Renew{% elif 'update' in request.path %}Update{% else %}Copy of{% endif %} {{object}}{% endblock %}
 
 {% block content %}
-<h3>Copy</h3>
+<h3>{% if 'renew' in request.path %}Renew{% elif 'update' in request.path %}Update{% else %}Copy of{% endif %} {{object}}</h3>
 <form method="post" class="form-control">
   {% csrf_token %}
   {% load crispy_forms_tags %}
   {{ form|crispy }}
 
-  <input type="submit" value="Add Book Copy!" class="btn btn-block btn-primary"/>
+  <input type="submit" value="{% if 'renew' in request.path %}Renew{% elif 'update' in request.path %}Update{% else %}Add{% endif %} Copy!" class="btn btn-block btn-primary"/>
 </form>
 
 {% endblock %}

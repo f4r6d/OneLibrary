@@ -4,7 +4,7 @@
 
 {% block content %}
 
-<h1>Book List</h1>
+<h1>{% if 'search' in request.path %}Search for {{ searched }}{% else %}Book List{% endif %}</h1>
 {% if book_list %}
 
 

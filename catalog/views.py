@@ -9,6 +9,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.contrib.auth.decorators import login_required, permission_required
 import datetime
 from django import forms
+from django.db.models import Q
 
 
 def index(request):
@@ -18,7 +19,8 @@ def index(request):
 
     num_books = Book.objects.all().count()
     num_instances = BookInstance.objects.all().count()
-    num_instances_available = BookInstance.objects.filter(status__exact='a').count()
+    num_instances_available = BookInstance.objects.filter(
+        status__exact='a').count()
     num_authors = Author.objects.count()
 
     context = {
@@ -30,11 +32,13 @@ def index(request):
     }
     return render(request, 'catalog/index.html', context)
 
+
 @permission_required(['is_staff'], raise_exception=True)
 def book_instance_delete(request, id):
     book = get_object_or_404(BookInstance, id=id)
     book.delete()
     return redirect(request.GET.get('next'))
+
 
 @permission_required(['is_staff'], raise_exception=True)
 def book_delete(request, pk):
@@ -45,6 +49,7 @@ def book_delete(request, pk):
     else:
         book.delete()
         return redirect(reverse('catalog:book-list'))
+
 
 class BookListView(ListView):
     model = Book
@@ -88,8 +93,10 @@ class AuthorCreateView(PermissionRequiredMixin, CreateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.fields['date_of_birth'].widget = forms.TextInput(attrs={'type': 'date'})
-        form.fields['date_of_death'].widget = forms.TextInput(attrs={'type': 'date'})
+        form.fields['date_of_birth'].widget = forms.TextInput(
+            attrs={'type': 'date'})
+        form.fields['date_of_death'].widget = forms.TextInput(
+            attrs={'type': 'date'})
         return form
 
 
@@ -100,8 +107,10 @@ class AuthorUpdateView(PermissionRequiredMixin, UpdateView):
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.fields['date_of_birth'].widget = forms.TextInput(attrs={'type': 'date'})
-        form.fields['date_of_death'].widget = forms.TextInput(attrs={'type': 'date'})
+        form.fields['date_of_birth'].widget = forms.TextInput(
+            attrs={'type': 'date'})
+        form.fields['date_of_death'].widget = forms.TextInput(
+            attrs={'type': 'date'})
         return form
 
 
@@ -123,16 +132,16 @@ class BookInstanceCreateView(PermissionRequiredMixin, CreateView):
     permission_required = 'is_staff'
 
     def form_valid(self, form):
-            print(self.request)
-            self.instance = form.save(commit=False)
-            self.instance.book = Book.objects.get(pk=self.kwargs['pk'])
-            self.instance.save()
-            return super().form_valid(form)
+        self.instance = form.save(commit=False)
+        self.instance.book = Book.objects.get(pk=self.kwargs['pk'])
+        self.instance.save()
+        return super().form_valid(form)
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['object'] = Book.objects.get(pk=self.kwargs['pk'])
         return context
+
 
 class LoanedBooksByUserListView(LoginRequiredMixin, ListView):
     model = BookInstance
@@ -141,7 +150,7 @@ class LoanedBooksByUserListView(LoginRequiredMixin, ListView):
     def get_queryset(self):
         return BookInstance.objects.filter(borrower=self.request.user).filter(status__exact='o').order_by('due_back')
 
-    
+
 class BorrowedBooksListView(PermissionRequiredMixin, ListView):
     model = BookInstance
     template_name = 'catalog/all_borrowed.html'
@@ -149,7 +158,8 @@ class BorrowedBooksListView(PermissionRequiredMixin, ListView):
 
     def get_queryset(self):
         return BookInstance.objects.filter(status__exact='o').all()
-        
+
+
 class BookInstanceRenewUpdateView(PermissionRequiredMixin, UpdateView):
     model = BookInstance
     fields = 'due_back',
@@ -157,10 +167,10 @@ class BookInstanceRenewUpdateView(PermissionRequiredMixin, UpdateView):
     success_url = reverse_lazy('catalog:borrowed')
     initial = {'due_back': datetime.date.today() + datetime.timedelta(weeks=3)}
 
-
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.fields['due_back'].widget = forms.TextInput(attrs={'type': 'date'})
+        form.fields['due_back'].widget = forms.TextInput(
+            attrs={'type': 'date'})
         return form
 
 
@@ -170,14 +180,15 @@ class BookInstanceUpdateView(PermissionRequiredMixin, UpdateView):
     permission_required = 'catalog.can_mark_returned'
     success_url = reverse_lazy('catalog:borrowed')
 
-
     def get_form(self, form_class=None):
         form = super(BookInstanceUpdateView, self).get_form(form_class)
-        form.fields['due_back'].widget = forms.TextInput(attrs={'type': 'date'})
+        form.fields['due_back'].widget = forms.TextInput(
+            attrs={'type': 'date'})
         return form
-    
+
     def get_success_url(self):
         return self.request.GET.get('next')
+
 
 @login_required()
 def borrow(request, pk):
@@ -189,7 +200,8 @@ def borrow(request, pk):
         book_instance.save()
         return redirect(reverse('catalog:my-borrowed'))
     else:
-        messages.warning(request, f'You can\'t borrow a "{book_instance.get_status_display().upper()}" copy!')
+        messages.warning(
+            request, f'You can\'t borrow a "{book_instance.get_status_display().upper()}" copy!')
         return redirect(request.GET.get('next'))
 
 
@@ -203,5 +215,21 @@ def take_back(request, pk):
         book_instance.save()
         return redirect(reverse('catalog:borrowed'))
     else:
-        messages.warning(request, f'You can\'t take back a "{book_instance.get_status_display().upper()}" copy!')
+        messages.warning(
+            request, f'You can\'t take back a "{book_instance.get_status_display().upper()}" copy!')
         return redirect(request.GET.get('next'))
+
+
+class SearchListView(ListView):
+    model = Book
+
+    def get_queryset(self):
+        return Book.objects.filter(
+            Q(title__icontains=self.request.GET.get('searched')) | Q(summary__icontains=self.request.GET.get(
+                'searched')) | Q(author__first_name__icontains=self.request.GET.get('searched')) | Q(author__last_name__icontains=self.request.GET.get('searched'))
+        )
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['searched'] = f"'{self.request.GET.get('searched')}'"
+        return context

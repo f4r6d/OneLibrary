@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+{% block title %}Login{% endblock %}
+
+
+{% block content %}
+
+
+{% if next %}
+    
+
+    <div class="alert alert-warning alert-dismissible fade show" role="alert">
+        {% if user.is_authenticated %}
+        <p>Your account doesn't have access to this page. To proceed,
+        please login with an account that has access.</p>
+        {% else %}
+        <p>Please login to see this page.</p>
+        {% endif %}
+    <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+    </div>
+
+    
+{% endif %}
+
+
+<h4>Login: </h4>
+<ul>
+    <form action="" method="post" class="form-control">
+        {% csrf_token %}
+        {% load crispy_forms_tags %}
+        {{ form|crispy }}
+        <input type="submit" value="Login" class="btn btn-block btn-primary"/>
+    </form>
+</ul>
+
+{% endblock %}

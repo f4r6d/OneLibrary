@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block title %}Renew Book{% endblock %}
+
+{% block content %}
+
+<h3>Update {{ object.book }} borrowed by {{ object.borrower }}</h3>
+
+<form method="post" class="form-control">
+    {% csrf_token %}
+    {% load crispy_forms_tags %}
+    {{ form|crispy }}
+
+    <input type="submit" value="Renew"/>
+</form>
+
+{% endblock %}

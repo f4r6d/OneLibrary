@@ -1,0 +1,47 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+OneLibrary | Django Training Library Project
+{% endblock %}
+
+
+{% block content %}
+
+<h3>Welcome To The OneLibrary</h3>
+<br>
+
+<div class="row">
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+            {% load static %}
+            <img src="{% static 'catalog/images/LibraryPottermore.webp' %}" width="100%">
+        </div>
+      </div>
+    </div>
+    <div class="col-sm-6">
+      <div class="card">
+        <div class="card-body">
+          <h5 class="card-title">About OneLibrary:</h5>
+          <p class="card-text">This is a fictional library designed to practice Django so you can borrow the books you like.</p>
+          <br>
+          <ul>
+            <li><strong>Books:</strong> {{ num_books }}</li>
+            <li><strong>Copies:</strong> {{ num_instances }}</li>
+            <li><strong>Copies available:</strong> {{ num_instances_available }}</li>
+            <li><strong>Authors:</strong> {{ num_authors }}</li>
+          </ul>
+          <br><br><br><br>
+          <a href="#" class="btn btn-secondary btn-block">Go To Books List</a>
+          <br>
+          <p>You visited OneLibrary {{ num_visit }} times.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<br><br>
+
+
+{% endblock %}

@@ -30,8 +30,41 @@
           </div>
         </li>
 
-        
-        
+
+
+        </ul>
+
+        <ul class="navbar-nav ">
+          {% if request.user.is_authenticated %}
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            {{ user|title }}
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="#">My Borrowed</a>
+            {% if request.user.is_staff %}
+            <a class="dropdown-item" href="#">All Borrowed</a>
+            {% endif %}
+            <div class="dropdown-divider"></div>
+            <a class="dropdown-item" href="{% url 'logout' %}?next={{ request.path }}">Logout</a>
+          </div>
+        </li>
+        {% else %}
+
+        <li class="nav-item dropdown">
+          <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            Login/Register
+          </a>
+          <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+            <a class="dropdown-item" href="{% url 'members:register' %}">Register</a>
+          <a class="dropdown-item" href="{% url 'login' %}">Login</a>
+          </div>
+        </li>
+
+       
+        {% endif %} 
+        </ul>
 
 
 

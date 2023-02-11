@@ -11,4 +11,4 @@ A simple Library App for training CRUD and REST and jQuery AJAX for a simple CHA
 
 You can visit at:
 
-[OneLibrary.pythonanywhere.com/] (http://OneLibrary.pythonanywhere.com/)
+http://OneLibrary.pythonanywhere.com/
